@@ -1,0 +1,17 @@
+{
+    "name": "jennosgroup/laravel-request-data",
+    "description": "A simple package that fetches only the data you need for creating/updating your models.",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jennosgroup\\LaravelRequestData\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Jenry Ollivierre",
+            "email": "jenry@jenryollivierre.com"
+        }
+    ],
+    "require": {}
+}
