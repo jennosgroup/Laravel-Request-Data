@@ -42,12 +42,12 @@ class PostRequestData extends RequestData
 
 We have two implementation, which is used when creating or updating models.
 
-When creating your model, in a typical store method of your controller, use the `getForCreate` method, which accepts two arguments.
+When creating your model, in a typical store method of your controller, use the static `getForCreate` method, which accepts two arguments.
 
 1) An array containing the data to work with i.e `$request->all()`.
 2) The request instance.
 
-When updating your model, in a typical update method of your controller, use the `getForUpdate` method, which accepts three arguments.
+When updating your model, in a typical update method of your controller, use the static `getForUpdate` method, which accepts three arguments.
 
 1) An array containg the data to work with i.e `$request->all()`.
 2) The model being updated
@@ -144,5 +144,34 @@ class PostRequestData extends RequestData
 }
 ```
 
+If your default attributes are complex to define in the properties, you can return an array from a static `getCreateDefaultAttributes` or static `getUpdateDefaultAttributes`.
+
+`getCreateDefaultAttributes` method is passed 2 arguments.
+1) $data - An array containing the data.
+2) $request - The request instance.
+
+`getUpdateDefaultAttributes` method is passed 3 arguments.
+1) $data - An array containing the data.
+2) $model - The model for the update
+3) $request - The request instance.
+
 ## Computing Data
+
+You may wish to manipulate the request data before output. You may do so by defining the following methods:
+
+1) A static `compute` method. This will work for both creating/updating requests.
+2) A static `computeForCreate` method. This only works for the create requests.
+3) A static `computeForUpdate` method. This only works for the update requests.
+
+3 arguments are passed which are:
+
+1) $data - The initial unfiltered data that was passed through the `getForCreate` or `getForUpdate` method.
+2) $allowedData - The data that is allowed. This is taken from the allowed attributes list.
+3) $request - the Illuminate\Http\Request instance.
+
+All the methods should return an array containing the data to return.
+
+When updating, you can access the model by using the static `getModel` method.
+
+If you choose to compute data by defining a static `compute` method, you can determine if we are on a create or update request by calling the static `isCreating` and static `isUpdating` methods.
 

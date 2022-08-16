@@ -68,13 +68,13 @@ abstract class RequestData
         static::$isCreating = true;
 
         // Get the data that is allowed
-        $allowedData = array_intersect_key($data, array_flip(static::getCreateAttributes()));
+        $allowedData = array_intersect_key($data, array_flip(static::getCreateAttributes($data, $request)));
 
         // Merge any defaults with the allowed data
-        $allowedData = array_merge(static::getCreateDefaultAttributes(), $allowedData);
+        $allowedData = array_merge(static::getCreateDefaultAttributes($data, $request), $allowedData);
 
         // Allows us to further manipulate the data.
-        if (method_exists(static::class, 'compute') && ! method_exists(static::class, 'computeForCreate')) {
+        if (method_exists(static::class, 'compute')) {
             $allowedData = static::compute($data, $allowedData, $request);
         }
 
@@ -102,13 +102,13 @@ abstract class RequestData
         static::$model = $model;
 
         // Get the data that is allowed
-        $allowedData = array_intersect_key($data, array_flip(static::getUpdateAttributes()));
+        $allowedData = array_intersect_key($data, array_flip(static::getUpdateAttributes($data, $model, $request)));
 
         // Merge any defaults with the allowed data
-        $allowedData = array_merge(static::getUpdateDefaultAttributes(), $allowedData);
+        $allowedData = array_merge(static::getUpdateDefaultAttributes($data, $model, $request), $allowedData);
 
         // Allows us to further manipulate the data.
-        if (method_exists(static::class, 'compute') && ! method_exists(static::class, 'computeForUpdate')) {
+        if (method_exists(static::class, 'compute')) {
             $allowedData = static::compute($data, $allowedData, $request);
         }
 
@@ -124,9 +124,12 @@ abstract class RequestData
     /**
      * Get the whitelisted attributes for the create request.
      *
+     * @param  array  $data
+     * @param  Illuminate\Http\Request  $request
+     *
      * @return array
      */
-    public static function getCreateAttributes(): array
+    public static function getCreateAttributes(array $data, Request $request): array
     {
         return array_merge(static::$attributes, static::$createAttributes);
     }
@@ -134,9 +137,13 @@ abstract class RequestData
     /**
      * Get the whitelisted attributes for the update request.
      *
+     * @param  array  $data
+     * @param  Illuminate\Database\Eloquent\Model  $model
+     * @param  Illuminate\Http\Request  $request
+     *
      * @return array
      */
-    public static function getUpdateAttributes(): array
+    public static function getUpdateAttributes(array $data, Model $model, Request $request): array
     {
         return array_merge(static::$attributes, static::$updateAttributes);
     }
@@ -144,9 +151,12 @@ abstract class RequestData
     /**
      * Get the default attributes for the create request.
      *
+     * @param  array  $data
+     * @param  Illuminate\Http\Request  $request
+     *
      * @return array
      */
-    public static function getCreateDefaultAttributes(): array
+    public static function getCreateDefaultAttributes(array $data, Request $request): array
     {
         return array_merge(static::$defaultAttributes, static::$createDefaultAttributes);
     }
@@ -154,9 +164,13 @@ abstract class RequestData
     /**
      * Get the default attributes for the update request.
      *
+     * @param  array  $data
+     * @param  Illuminate\Database\Eloquent\Model  $model
+     * @param  Illuminate\Http\Request  $request
+     *
      * @return array
      */
-    public static function getUpdateDefaultAttributes(): array
+    public static function getUpdateDefaultAttributes(array $data, Model $model, Request $request): array
     {
         return array_merge(static::$defaultAttributes, static::$updateDefaultAttributes);
     }
