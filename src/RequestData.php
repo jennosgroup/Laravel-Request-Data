@@ -14,11 +14,13 @@ abstract class RequestData
 
     /**
      * The whitelist of attributes for when a create request is being handled.
+     * This is merged with the the $attributes property.
      */
     protected static array $createAttributes = [];
 
     /**
      * The whitelist of attributes for when an update request is being handled.
+     * This is merged with the $attributes property.
      */
     protected static array $updateAttributes = [];
 
@@ -29,11 +31,13 @@ abstract class RequestData
 
     /**
      * The default attributes for when a create request is being handled.
+     * This is merged with the $defaultAttributes property.
      */
     protected static array $createDefaultAttributes = [];
 
     /**
      * The default attributes for when an update request is being handled.
+     * This is merged with the $defaultAttributes property.
      */
     protected static array $updateDefaultAttributes = [];
 
